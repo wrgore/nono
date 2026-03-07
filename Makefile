@@ -6,7 +6,7 @@
 #   make check        Run clippy and format check
 #   make release      Build release binaries
 
-.PHONY: all build build-lib build-cli build-ffi test test-lib test-cli test-ffi check clippy clippy-ci fmt clean install help
+.PHONY: all build build-lib build-cli build-ffi test test-lib test-cli test-ffi check clippy clippy-ci fmt clean install audit help
 
 # Default target
 all: build
@@ -97,8 +97,12 @@ doc:
 doc-lib:
 	cargo doc -p nono --no-deps --open
 
+# Security audit
+audit:
+	cargo audit
+
 # CI simulation (what CI would run)
-ci: check test
+ci: check test audit
 	@echo "CI checks passed"
 
 # Help
@@ -125,6 +129,9 @@ help:
 	@echo "  make clippy-ci      Run strict workspace clippy (all targets)"
 	@echo "  make fmt            Format code"
 	@echo "  make fmt-check      Check formatting"
+	@echo ""
+	@echo "Security:"
+	@echo "  make audit          Run cargo audit for vulnerabilities"
 	@echo ""
 	@echo "Other:"
 	@echo "  make install        Install CLI to ~/.cargo/bin"
